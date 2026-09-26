@@ -15,12 +15,12 @@ except Exception as e:
 
 # Initialize the Gemini model
 # Initialize the Gemini model
+# Initialize the Gemini model
 def analyze_news(news_text):
     try:
-        # Using the correct and active gemini-1.5-flash model
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        # Trying with the latest alias
+        model = genai.GenerativeModel('gemini-1.5-flash-latest')
         
-        # Prompt engineered for specific output format
         prompt = f"""
         Act as an expert fact-checker. Analyze the following news excerpt or claim based on your extensive training data.
         
@@ -31,12 +31,17 @@ def analyze_news(news_text):
         Line 2: Provide specific reasoning or historical context to support your verdict.
         """
         
-        # Standard generation call
         response = model.generate_content(prompt)
         return response.text
         
     except Exception as e:
-        return f"ERROR\nCould not process the request. Error details: {e}"
+        try:
+            # Fallback to standard gemini-flash if latest alias fails
+            model = genai.GenerativeModel('gemini-flash')
+            response = model.generate_content(prompt)
+            return response.text
+        except Exception as inner_e:
+            return f"ERROR\nCould not process the request. Error details: {inner_e}"
 
 # --- UI Design ---
 st.title("🚨 Fake News Detector Dashboard")
