@@ -14,10 +14,11 @@ except Exception as e:
     st.stop()
 
 # Initialize the Gemini model
+# Initialize the Gemini model
 def analyze_news(news_text):
     try:
-        # Using the stable gemini-1.5-flash model
-        model = genai.GenerativeModel('gemini-pro')
+        # Using the correct and active gemini-1.5-flash model
+        model = genai.GenerativeModel('gemini-1.5-flash')
         
         # Prompt engineered for specific output format
         prompt = f"""
