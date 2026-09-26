@@ -17,7 +17,7 @@ except Exception as e:
 def analyze_news(news_text):
     try:
         # Using the stable gemini-1.5-flash model
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.GenerativeModel('gemini-pro')
         
         # Prompt engineered for specific output format
         prompt = f"""
