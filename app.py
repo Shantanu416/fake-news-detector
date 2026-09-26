@@ -20,7 +20,7 @@ genai.configure(api_key=GOOGLE_API_KEY)
 def analyze_news(news_text):
     try:
         # Use gemini-1.5-flash which is fast and supports search grounding
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        model = genai.GenerativeModel('gemini-pro')
         
         # Prompt engineered for specific output format
         prompt = f"""
@@ -34,10 +34,7 @@ def analyze_news(news_text):
         """
         
         # Adding tools to enable Google Search
-        response = model.generate_content(
-            prompt,
-            tools='google_search_retrieval'
-        )
+      response = model.generate_content(prompt)
         return response.text
     except Exception as e:
         return f"ERROR\nCould not process the request. Error details: {e}"
