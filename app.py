@@ -7,18 +7,16 @@ st.set_page_config(page_title="Fake News Detector", page_icon="🕵️", layout=
 
 # Fetch the API key securely from Streamlit secrets
 try:
-   try:
     GOOGLE_API_KEY = st.secrets["GOOGLE_API_KEY"]
-except KeyError:
-    st.error("API Key not found. Please configure Streamlit secrets.")
+    genai.configure(api_key=GOOGLE_API_KEY)
+except Exception as e:
+    st.error("Google API Key not found in Streamlit Secrets. Please configure it in app settings.")
     st.stop()
-    
-genai.configure(api_key=GOOGLE_API_KEY)
 
 # Initialize the Gemini model
 def analyze_news(news_text):
     try:
-        # Using the stable gemini-pro model
+        # Using the stable gemini-1.5-flash model
         model = genai.GenerativeModel('gemini-1.5-flash')
         
         # Prompt engineered for specific output format
