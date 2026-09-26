@@ -13,6 +13,7 @@ except Exception as e:
     st.error("Google API Key not found in Streamlit Secrets. Please configure it in app settings.")
     st.stop()
 # Initialize the Gemini model with detailed error reporting
+# Initialize the Gemini model using safe lookup
 def analyze_news(news_text):
     try:
         prompt = f"""
@@ -25,13 +26,21 @@ def analyze_news(news_text):
         Line 2: Provide specific reasoning or historical context to support your verdict.
         """
         
-        # Testing with gemini-1.5-flash and capturing the exact exception
-        model = genai.GenerativeModel('gemini-1.5-flash')
+        # Let's iterate through available models dynamically or use a guaranteed safe fallback
+        model = None
+        for m in genai.list_models():
+            if 'generateContent' in m.supported_generation_methods:
+                if 'flash' in m.name or 'pro' in m.name:
+                    model = genai.GenerativeModel(m.name)
+                    break
+        
+        if not model:
+            model = genai.GenerativeModel('gemini-pro')
+            
         response = model.generate_content(prompt)
         return response.text
         
     except Exception as e:
-        # This will show us the exact technical reason on your dashboard
         return f"ERROR\nDetailed Exception: {str(e)}"
 
 # --- UI Design ---
