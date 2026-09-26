@@ -14,6 +14,7 @@ except Exception as e:
     st.stop()
 # Initialize the Gemini model with detailed error reporting
 # Initialize the Gemini model using safe lookup
+# Initialize the Gemini model with the latest recommended model
 def analyze_news(news_text):
     try:
         prompt = f"""
@@ -26,17 +27,8 @@ def analyze_news(news_text):
         Line 2: Provide specific reasoning or historical context to support your verdict.
         """
         
-        # Let's iterate through available models dynamically or use a guaranteed safe fallback
-        model = None
-        for m in genai.list_models():
-            if 'generateContent' in m.supported_generation_methods:
-                if 'flash' in m.name or 'pro' in m.name:
-                    model = genai.GenerativeModel(m.name)
-                    break
-        
-        if not model:
-            model = genai.GenerativeModel('gemini-pro')
-            
+        # Using the recommended model name directly
+        model = genai.GenerativeModel('gemini-2.5-flash')
         response = model.generate_content(prompt)
         return response.text
         
