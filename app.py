@@ -12,32 +12,27 @@ try:
 except Exception as e:
     st.error("Google API Key not found in Streamlit Secrets. Please configure it in app settings.")
     st.stop()
-
-# Initialize the Gemini model with fallback
+# Initialize the Gemini model with detailed error reporting
 def analyze_news(news_text):
-    prompt = f"""
-    Act as an expert fact-checker. Analyze the following news excerpt or claim based on your extensive training data.
-    
-    News Claim: "{news_text}"
-    
-    Provide the output strictly in two lines:
-    Line 1: State clearly if the news is FAKE, REAL, or UNVERIFIED.
-    Line 2: Provide specific reasoning or historical context to support your verdict.
-    """
-    
-    # Try different model names that work across various API versions
-    model_names = ['gemini-pro', 'gemini-1.5-pro-latest', 'gemini-1.5-flash']
-    
-    for m_name in model_names:
-        try:
-            model = genai.GenerativeModel(m_name)
-            response = model.generate_content(prompt)
-            if response and response.text:
-                return response.text
-        except Exception:
-            continue
-            
-    return "ERROR\nCould not process the request using any available Gemini model variant."
+    try:
+        prompt = f"""
+        Act as an expert fact-checker. Analyze the following news excerpt or claim based on your extensive training data.
+        
+        News Claim: "{news_text}"
+        
+        Provide the output strictly in two lines:
+        Line 1: State clearly if the news is FAKE, REAL, or UNVERIFIED.
+        Line 2: Provide specific reasoning or historical context to support your verdict.
+        """
+        
+        # Testing with gemini-1.5-flash and capturing the exact exception
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        response = model.generate_content(prompt)
+        return response.text
+        
+    except Exception as e:
+        # This will show us the exact technical reason on your dashboard
+        return f"ERROR\nDetailed Exception: {str(e)}"
 
 # --- UI Design ---
 st.title("🚨 Fake News Detector Dashboard")
