@@ -29,7 +29,7 @@ def analyze_news(news_text):
         
         # FIXED: Correct way to initialize and call the Generative Model in Python SDK
         # Using a stable standard model name like "gemini-1.5-flash"
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        model = genai.GenerativeModel("gemini-pro")
         response = model.generate_content(prompt)
         return response.text
         
@@ -37,7 +37,7 @@ def analyze_news(news_text):
         return f"ERROR\nDetailed Exception: {str(e)}"
 
 # --- UI Design ---
-st.title("🚨 Fake News Detector Dashboard")
+st.title("🚨 Fake News Detector ")
 st.markdown("A Hybrid AI engine that analyzes text and cross-references live global sources to detect misinformation.")
 
 st.divider()
