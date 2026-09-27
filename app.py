@@ -26,19 +26,13 @@ def analyze_news(news_text):
         Line 1: State clearly if the news is FAKE, REAL, or UNVERIFIED.
         Line 2: Provide specific reasoning or historical context to support your verdict.
         """
-        # Sabse naye SDK ke mutabiq yeh standard model string hai:
-        model = genai.GenerativeModel("gemini-1.5-flash")
+        # Wapas gemini-3.8-flash par set kar rahe hain jo Google recommend kar raha hai
+        model = genai.GenerativeModel("gemini-3.8-flash")
         response = model.generate_content(prompt)
         return response.text
         
     except Exception as e:
-        # Agar phir bhi error aaye, toh ek baar fallback model try karte hain
-        try:
-            model = genai.GenerativeModel("gemini-2.5-flash")
-            response = model.generate_content(prompt)
-            return response.text
-        except Exception as e2:
-            return f"ERROR\nDetailed Exception: {str(e)} | Fallback Error: {str(e2)}"
+        return f"ERROR\nDetailed Exception: {str(e)}"
 
 # --- UI Design ---
 st.title("🚨 Fake News Detector ")
